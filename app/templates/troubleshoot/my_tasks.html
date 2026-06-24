@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Task Saya - Troubleshoot App{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="mb-4">
+    <h1 class="h3">Task Saya ({{ current_user.username }})</h1>
+    <p class="text-muted">Kelola troubleshoot yang sudah diassign ke Anda.</p>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card bg-primary text-white">
+        <div class="card-body">
+          <h6 class="card-title text-uppercase">Total Task</h6>
+          <h2>{{ stats.total }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-warning text-dark">
+        <div class="card-body">
+          <h6 class="card-title text-uppercase">Pending</h6>
+          <h2>{{ stats.pending }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-info text-white">
+        <div class="card-body">
+          <h6 class="card-title text-uppercase">In Progress</h6>
+          <h2>{{ stats.inprogress }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-success text-white">
+        <div class="card-body">
+          <h6 class="card-title text-uppercase">Completed</h6>
+          <h2>{{ stats.completed }}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter -->
+  <div class="card shadow-sm p-3 mb-4">
+    <form method="GET" class="row g-3 align-items-center">
+      <div class="col-md-4">
+        <select class="form-select" name="status">
+          <option value="">Semua Status</option>
+          <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pending</option>
+          <option value="InProgress" {% if status_filter == 'InProgress' %}selected{% endif %}>In Progress</option>
+          <option value="Completed" {% if status_filter == 'Completed' %}selected{% endif %}>Completed</option>
+        </select>
+      </div>
+      <div class="col-md-auto">
+        <button type="submit" class="btn btn-primary">Filter</button>
+        <a href="{{ url_for('troubleshoot.my_tasks') }}" class="btn btn-outline-secondary">Reset</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Task List -->
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>No SPK</th>
+          <th>Pelanggan</th>
+          <th>Jenis Trouble</th>
+          <th>Perangkat</th>
+          <th>Status</th>
+          <th>Tanggal Komplain</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if pagination.items %}
+          {% for item in pagination.items %}
+          <tr>
+            <td>
+              <a href="{{ url_for('troubleshoot.edit', id=item.id) }}" class="text-decoration-none">{{ item.no_spk }}</a>
+            </td>
+            <td>{{ item.nama_pelanggan }}</td>
+            <td>{{ item.jenis_trouble.value }}</td>
+            <td>{{ item.perangkat.value }}</td>
+            <td>
+              <span class="badge bg-{% if item.status.value == 'Pending' %}warning{% elif item.status.value == 'In Progress' %}info{% else %}success{% endif %}">
+                {{ item.status.value }}
+              </span>
+            </td>
+            <td>{{ item.tanggal_komplain.strftime('%d-%m-%Y') }}</td>
+            <td>
+              <div class="btn-group btn-group-sm" role="group">
+                <a href="{{ url_for('troubleshoot.update_status', id=item.id) }}" class="btn btn-outline-primary" title="Update Status">
+                  <i class="bi bi-pencil"></i>
+                </a>
+                <a href="{{ url_for('troubleshoot.edit', id=item.id) }}" class="btn btn-outline-secondary" title="Edit">
+                  <i class="bi bi-pencil-square"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="7" class="text-center text-muted py-4">Tidak ada task yang ditemukan.</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  {% if pagination.pages > 1 %}
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      {% if pagination.has_prev %}
+      <li class="page-item">
+        <a class="page-link" href="{{ url_for('troubleshoot.my_tasks', page=pagination.prev_num, status=status_filter) }}">Previous</a>
+      </li>
+      {% endif %}
+
+      {% for page_num in pagination.iter_pages() %}
+        {% if page_num %}
+          {% if page_num == pagination.page %}
+          <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="{{ url_for('troubleshoot.my_tasks', page=page_num, status=status_filter) }}">{{ page_num }}</a></li>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+
+      {% if pagination.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="{{ url_for('troubleshoot.my_tasks', page=pagination.next_num, status=status_filter) }}">Next</a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Update Status - Troubleshoot App{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Update Status Troubleshoot</h5>
+        </div>
+        <div class="card-body">
+          <!-- Troubleshoot Info -->
+          <div class="alert alert-info">
+            <small class="d-block"><strong>No SPK:</strong> {{ entry.no_spk }}</small>
+            <small class="d-block"><strong>Pelanggan:</strong> {{ entry.nama_pelanggan }}</small>
+            <small class="d-block"><strong>Jenis Trouble:</strong> {{ entry.jenis_trouble.value }}</small>
+            <small class="d-block"><strong>Status Saat Ini:</strong> 
+              <span class="badge bg-{% if entry.status.value == 'Pending' %}warning{% elif entry.status.value == 'In Progress' %}info{% else %}success{% endif %}">
+                {{ entry.status.value }}
+              </span>
+            </small>
+          </div>
+
+          <!-- Update Status Form -->
+          <form method="POST" class="mt-4">
+            {{ form.hidden_tag() }}
+            
+            <div class="mb-3">
+              {{ form.status.label(class="form-label") }}
+              {% if form.status.errors %}
+                {{ form.status(class="form-select is-invalid") }}
+                <div class="invalid-feedback d-block">
+                  {% for error in form.status.errors %}
+                    <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+              {% else %}
+                {{ form.status(class="form-select") }}
+              {% endif %}
+              <small class="text-muted d-block mt-2">
+                <strong>Penjelasan Status:</strong><br>
+                • <strong>Pending:</strong> Belum mulai dikerjakan<br>
+                • <strong>In Progress:</strong> Sedang dalam pengerjaan<br>
+                • <strong>Completed:</strong> Sudah selesai
+              </small>
+            </div>
+
+            <div class="d-flex gap-2">
+              {{ form.submit(class="btn btn-primary") }}
+              <a href="{{ url_for('troubleshoot.my_tasks') }}" class="btn btn-outline-secondary">Batal</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

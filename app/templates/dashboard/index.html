@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Troubleshoot App{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row gy-4">
+    <div class="col-12">
+      <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+        <div>
+          <h1 class="h3">Dashboard</h1>
+          <p class="text-muted">Ringkasan manajemen troubleshoot jaringan.</p>
+        </div>
+        <div class="d-flex gap-2 align-items-center">
+          {% if current_user.role.value == 'admin' %}
+          <form method="POST" action="{{ url_for('admin.delete_all_data') }}" onsubmit="return confirm('Hapus semua data troubleshoot dan riwayat clustering? Tindakan ini tidak bisa dibatalkan.');">
+            <button type="submit" class="btn btn-outline-danger btn-sm">Hapus Semua Data</button>
+          </form>
+          {% endif %}
+          {% if not last_clustering %}
+          <div class="alert alert-warning mb-0">Belum ada clustering — jalankan clustering terlebih dahulu.</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-3">
+      <div class="card shadow-sm p-4 border-0">
+        <div class="d-flex align-items-center gap-3">
+          <div class="display-5 text-primary"><i class="bi bi-database-fill"></i></div>
+          <div>
+            <small class="text-muted">Total Data Troubleshoot</small>
+            <div class="fs-2 fw-semibold" id="count-total">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-3">
+      <div class="card shadow-sm p-4 border-0">
+        <div class="d-flex align-items-center gap-3">
+          <div class="display-5 text-danger"><i class="bi bi-exclamation-octagon-fill"></i></div>
+          <div>
+            <small class="text-muted">Kategori Berat</small>
+            <div class="fs-2 fw-semibold" id="count-berat">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-3">
+      <div class="card shadow-sm p-4 border-0">
+        <div class="d-flex align-items-center gap-3">
+          <div class="display-5 text-warning"><i class="bi bi-exclamation-triangle-fill"></i></div>
+          <div>
+            <small class="text-muted">Kategori Sedang</small>
+            <div class="fs-2 fw-semibold" id="count-sedang">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-3">
+      <div class="card shadow-sm p-4 border-0">
+        <div class="d-flex align-items-center gap-3">
+          <div class="display-5 text-success"><i class="bi bi-check-circle-fill"></i></div>
+          <div>
+            <small class="text-muted">Kategori Ringan</small>
+            <div class="fs-2 fw-semibold" id="count-ringan">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="card shadow-sm p-4">
+        <h5>Jenis Trouble</h5>
+        <canvas id="jenisChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="card shadow-sm p-4">
+        <h5>Perangkat</h5>
+        <canvas id="perangkatChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="card shadow-sm p-4">
+        <h5>Trend Bulanan</h5>
+        <canvas id="trendChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="card shadow-sm p-4">
+        <h5>Rata-rata Durasi per Kategori</h5>
+        <canvas id="durasiChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card shadow-sm p-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <div>
+            <h5>Data Terbaru</h5>
+            <p class="text-muted mb-0">5 entri troubleshoot terbaru.</p>
+          </div>
+          <a href="{{ url_for('troubleshoot.index') }}" class="btn btn-sm btn-outline-primary">Lihat semua</a>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>No SPK</th>
+                <th>Nama Pelanggan</th>
+                <th>Jenis</th>
+                <th>Perangkat</th>
+                <th>Kategori</th>
+                <th>Durasi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in data_terbaru %}
+              <tr>
+                <td>{{ item.no_spk }}</td>
+                <td>{{ item.nama_pelanggan }}</td>
+                <td>{{ item.jenis_trouble.value }}</td>
+                <td>{{ item.perangkat.value }}</td>
+                <td>
+                  {% if item.kategori_cluster %}
+                    <span class="badge bg-{{ 'success' if item.kategori_cluster.value == 'Ringan' else 'warning text-dark' if item.kategori_cluster.value == 'Sedang' else 'danger' }}">
+                      {{ item.kategori_cluster.value }}
+                    </span>
+                  {% else %}
+                    <span class="text-muted">-</span>
+                  {% endif %}
+                </td>
+                <td>{{ item.durasi_pengerjaan or '-' }} hari</td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="6" class="text-center text-muted">Belum ada data.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const totalData = {{ total_data }};
+  const perKategori = {{ per_kategori | tojson }};
+  const perJenisTrouble = {{ per_jenis_trouble | tojson }};
+  const perPerangkat = {{ per_perangkat | tojson }};
+  const trendBulanan = {{ trend_bulanan | tojson }};
+  const rataDurasi = {{ rata_durasi_per_kategori | tojson }};
+
+  const countItems = [
+    { id: 'count-total', value: totalData },
+    { id: 'count-berat', value: perKategori.Berat },
+    { id: 'count-sedang', value: perKategori.Sedang },
+    { id: 'count-ringan', value: perKategori.Ringan },
+  ];
+
+  function animateCount(id, value) {
+    const el = document.getElementById(id);
+    let current = 0;
+    const step = Math.max(1, Math.round(value / 40));
+    const interval = setInterval(() => {
+      current += step;
+      if (current >= value) {
+        el.textContent = value;
+        clearInterval(interval);
+      } else {
+        el.textContent = current;
+      }
+    }, 15);
+  }
+
+  countItems.forEach(item => animateCount(item.id, item.value));
+
+  function buildDonutChart(ctx, labels, data, colors) {
+    return new Chart(ctx, {
+      type: 'doughnut',
+      data: { labels, datasets: [{ data, backgroundColor: colors }] },
+      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+  }
+
+  function buildBarChart(ctx, labels, data, color) {
+    return new Chart(ctx, {
+      type: 'bar',
+      data: { labels, datasets: [{ data, backgroundColor: color }] },
+      options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+  }
+
+  const jenisCtx = document.getElementById('jenisChart');
+  const jenisLabels = Object.keys(perJenisTrouble);
+  const jenisData = Object.values(perJenisTrouble);
+  buildDonutChart(jenisCtx, jenisLabels, jenisData, ['#1a3a5c', '#28a745', '#ffc107', '#dc3545', '#6c757d']);
+
+  const perangkatCtx = document.getElementById('perangkatChart');
+  buildBarChart(perangkatCtx, Object.keys(perPerangkat), Object.values(perPerangkat), '#1a3a5c');
+
+  const trendCtx = document.getElementById('trendChart');
+  buildBarChart(trendCtx, trendBulanan.map(item => item.bulan), trendBulanan.map(item => item.jumlah), '#28a745');
+
+  const durasiCtx = document.getElementById('durasiChart');
+  buildBarChart(durasiCtx, Object.keys(rataDurasi), Object.values(rataDurasi), ['#28a745', '#ffc107', '#dc3545']);
+</script>
+{% endblock %}

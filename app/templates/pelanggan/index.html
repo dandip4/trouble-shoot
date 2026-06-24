@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Kelola Pelanggan - Troubleshoot App{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+    <div>
+      <h1 class="h3">Kelola Pelanggan</h1>
+      <p class="text-muted">Manajemen data pelanggan dan informasi kontak.</p>
+    </div>
+    <div class="d-flex gap-2">
+      <a href="{{ url_for('pelanggan.tambah') }}" class="btn btn-primary">Tambah Pelanggan</a>
+      <a href="{{ url_for('pelanggan.perangkat_index') }}" class="btn btn-outline-secondary">Kelola Perangkat</a>
+    </div>
+  </div>
+
+  <div class="card shadow-sm p-3 mb-4">
+    <form method="GET" class="row g-3 align-items-center">
+      <div class="col-md-6">
+        <input type="text" name="search" class="form-control" placeholder="Cari nama, kontak, atau lokasi" value="{{ search }}">
+      </div>
+      <div class="col-md-auto">
+        <button type="submit" class="btn btn-primary">Cari</button>
+        {% if search %}
+        <a href="{{ url_for('pelanggan.index') }}" class="btn btn-outline-secondary">Reset</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Nama Pelanggan</th>
+          <th>Kontak</th>
+          <th>Email</th>
+          <th>Lokasi</th>
+          <th>Departemen</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if pagination.items %}
+          {% for item in pagination.items %}
+          <tr>
+            <td><strong>{{ item.nama }}</strong></td>
+            <td>{{ item.kontak }}</td>
+            <td>{{ item.email or '-' }}</td>
+            <td>{{ item.lokasi }}</td>
+            <td>{{ item.departemen or '-' }}</td>
+            <td>
+              <div class="btn-group btn-group-sm" role="group">
+                <a href="{{ url_for('pelanggan.edit', id=item.id) }}" class="btn btn-outline-primary" title="Edit">
+                  <i class="bi bi-pencil-square"></i>
+                </a>
+                <form method="POST" action="{{ url_for('pelanggan.hapus', id=item.id) }}" onsubmit="return confirm('Hapus pelanggan ini?');" style="display: inline;">
+                  <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="6" class="text-center text-muted py-4">Tidak ada data pelanggan.</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  {% if pagination.pages > 1 %}
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      {% if pagination.has_prev %}
+      <li class="page-item">
+        <a class="page-link" href="{{ url_for('pelanggan.index', page=pagination.prev_num, search=search) }}">Previous</a>
+      </li>
+      {% endif %}
+
+      {% for page_num in pagination.iter_pages() %}
+        {% if page_num %}
+          {% if page_num == pagination.page %}
+          <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="{{ url_for('pelanggan.index', page=page_num, search=search) }}">{{ page_num }}</a></li>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+
+      {% if pagination.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="{{ url_for('pelanggan.index', page=pagination.next_num, search=search) }}">Next</a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+</div>
+{% endblock %}

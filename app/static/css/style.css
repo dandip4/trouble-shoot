@@ -1,0 +1,56 @@
+:root {
+  --primary-color: #1a3a5c;
+  --sidebar-bg: #11213a;
+  --content-bg: #f8f9fa;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: var(--content-bg);
+}
+
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background-color: var(--sidebar-bg);
+  color: #ffffff;
+}
+
+.sidebar-header h3,
+.sidebar-header p,
+.sidebar .nav-link {
+  color: #ffffff;
+}
+
+.sidebar .nav-link {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.admin-menu {
+  display: none;
+}
+
+main {
+  background-color: #ffffff;
+}
+
+.card {
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: #132e4a;
+  border-color: #132e4a;
+}

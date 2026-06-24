@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Data Troubleshoot - Troubleshoot App{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+    <div>
+      <h1 class="h3">Data Troubleshoot</h1>
+      <p class="text-muted">Daftar dan kelola catatan troubleshoot jaringan.</p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      {% if current_user.role.value != 'manajer' %}
+      <a href="{{ url_for('troubleshoot.tambah') }}" class="btn btn-primary">Tambah Troubleshoot</a>
+      <a href="{{ url_for('troubleshoot.upload') }}" class="btn btn-outline-primary">Upload Excel</a>
+      {% endif %}
+      <a href="{{ url_for('troubleshoot.export') }}" class="btn btn-outline-secondary">Export Excel</a>
+    </div>
+  </div>
+
+  <div class="card shadow-sm p-4 mb-4">
+    <form method="GET" class="row g-3 align-items-center">
+      <div class="col-md-4">
+        <input type="text" name="search" class="form-control" placeholder="Cari nama, jenis, perangkat" value="{{ search }}">
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" name="kategori">
+          <option value="">Semua kategori</option>
+          <option value="Ringan" {% if kategori_filter == 'Ringan' %}selected{% endif %}>Ringan</option>
+          <option value="Sedang" {% if kategori_filter == 'Sedang' %}selected{% endif %}>Sedang</option>
+          <option value="Berat" {% if kategori_filter == 'Berat' %}selected{% endif %}>Berat</option>
+        </select>
+      </div>
+      <div class="col-md-auto">
+        <button type="submit" class="btn btn-primary">Cari</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>No SPK</th>
+          <th>Nama</th>
+          <th>Jenis Trouble</th>
+          <th>Perangkat</th>
+          <th>Durasi</th>
+          <th>Kategori Cluster</th>
+          <th>Assigned To</th>
+          <th>Status</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in pagination.items %}
+        <tr>
+          <td>{{ item.no_spk }}</td>
+          <td>{{ item.nama_pelanggan }}</td>
+          <td>{{ item.jenis_trouble.value }}</td>
+          <td>{{ item.perangkat.value }}</td>
+          <td>{{ item.durasi_pengerjaan or '-' }} hari</td>
+          <td>
+            {% if item.kategori_cluster %}
+              {% if item.kategori_cluster.value == 'Ringan' %}
+                <span class="badge bg-success">Ringan</span>
+              {% elif item.kategori_cluster.value == 'Sedang' %}
+                <span class="badge bg-warning text-dark">Sedang</span>
+              {% else %}
+                <span class="badge bg-danger">Berat</span>
+              {% endif %}
+            {% else %}
+              <span class="text-muted">-</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if item.assigned_user %}
+              <span class="badge bg-primary">{{ item.assigned_user.username }}</span>
+            {% else %}
+              <span class="text-muted">-</span>
+            {% endif %}
+          </td>
+          <td>
+            <span class="badge bg-{% if item.status.value == 'Pending' %}warning{% elif item.status.value == 'In Progress' %}info{% else %}success{% endif %}">
+              {{ item.status.value }}
+            </span>
+          </td>
+          <td>
+            <div class="btn-group btn-group-sm" role="group">
+              <a href="{{ url_for('troubleshoot.edit', id=item.id) }}" class="btn btn-outline-primary" title="Edit">
+                <i class="bi bi-pencil-square"></i>
+              </a>
+              {% if current_user.role.value == 'admin' %}
+                <a href="{{ url_for('troubleshoot.assign', id=item.id) }}" class="btn btn-outline-success" title="Assign">
+                  <i class="bi bi-person-plus"></i>
+                </a>
+              {% endif %}
+              {% if current_user.role.value in ['admin', 'teknisi'] and item.assigned_to %}
+                <a href="{{ url_for('troubleshoot.update_status', id=item.id) }}" class="btn btn-outline-warning" title="Update Status">
+                  <i class="bi bi-arrow-repeat"></i>
+                </a>
+              {% endif %}
+              {% if current_user.role.value != 'manajer' and (current_user.role.value == 'admin' or item.created_by == current_user.id) %}
+                <form method="POST" action="{{ url_for('troubleshoot.hapus', id=item.id) }}" onsubmit="return confirm('Hapus data ini?');" style="display: inline;">
+                  <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="9" class="text-center text-muted">Tidak ada data.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <nav aria-label="Pagination">
+    <ul class="pagination justify-content-center mt-4">
+      {% if pagination.has_prev %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ pagination.prev_num }}&search={{ search }}&kategori={{ kategori_filter }}">Sebelumnya</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">Sebelumnya</span></li>
+      {% endif %}
+
+      {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+        {% if page_num %}
+          <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+            <a class="page-link" href="?page={{ page_num }}&search={{ search }}&kategori={{ kategori_filter }}">{{ page_num }}</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">…</span></li>
+        {% endif %}
+      {% endfor %}
+
+      {% if pagination.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ pagination.next_num }}&search={{ search }}&kategori={{ kategori_filter }}">Berikutnya</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">Berikutnya</span></li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+{% endblock %}

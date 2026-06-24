@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Laporan - Troubleshoot App{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+    <div>
+      <h1 class="h3">Laporan</h1>
+      <p class="text-muted">Ringkasan laporan troubleshoot jaringan.</p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <a href="{{ export_url }}" class="btn btn-success">Export Excel</a>
+      <a href="{{ url_for('laporan.riwayat_cluster') }}" class="btn btn-outline-secondary">Riwayat Clustering</a>
+    </div>
+  </div>
+
+  <div class="card shadow-sm p-4 mb-4">
+    <form method="GET" class="row g-3">
+      <div class="col-md-3">
+        <label class="form-label">Dari</label>
+        <input type="date" name="dari" class="form-control" value="{{ dari }}">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Sampai</label>
+        <input type="date" name="sampai" class="form-control" value="{{ sampai }}">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Kategori</label>
+        <select name="kategori" class="form-select">
+          <option value="Semua" {% if selected_kategori == 'Semua' %}selected{% endif %}>Semua</option>
+          <option value="Ringan" {% if selected_kategori == 'Ringan' %}selected{% endif %}>Ringan</option>
+          <option value="Sedang" {% if selected_kategori == 'Sedang' %}selected{% endif %}>Sedang</option>
+          <option value="Berat" {% if selected_kategori == 'Berat' %}selected{% endif %}>Berat</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Jenis Trouble</label>
+        <select name="jenis" class="form-select" multiple size="3">
+          {% for jenis in jenis_options %}
+          <option value="{{ jenis }}" {% if jenis in selected_jenis %}selected{% endif %}>{{ jenis }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Perangkat</label>
+        <select name="perangkat" class="form-select" multiple size="3">
+          {% for perangkat in perangkat_options %}
+          <option value="{{ perangkat }}" {% if perangkat in selected_perangkat %}selected{% endif %}>{{ perangkat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-12 text-end">
+        <button type="submit" class="btn btn-primary">Terapkan Filter</button>
+        <a href="{{ url_for('laporan.index') }}" class="btn btn-outline-secondary">Reset</a>
+      </div>
+    </form>
+  </div>
+
+  <div class="row g-4 mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm p-4 h-100">
+        <h6>Ringkasan Kategori</h6>
+        <ul class="list-group list-group-flush mt-3">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Ringan
+            <span class="badge bg-success">{{ summary.kategori.Ringan or 0 }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Sedang
+            <span class="badge bg-warning text-dark">{{ summary.kategori.Sedang or 0 }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Berat
+            <span class="badge bg-danger">{{ summary.kategori.Berat or 0 }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm p-4 h-100">
+        <h6>Jenis Trouble</h6>
+        <ul class="list-group list-group-flush mt-3">
+          {% for jenis, jumlah in summary.jenis.items() %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ jenis }}
+            <span class="badge bg-primary">{{ jumlah }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm p-4 h-100">
+        <h6>Perangkat</h6>
+        <ul class="list-group list-group-flush mt-3">
+          {% for perangkat, jumlah in summary.perangkat.items() %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ perangkat }}
+            <span class="badge bg-secondary">{{ jumlah }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm p-4 mb-4">
+    <h5 class="mb-3">Data Troubleshoot</h5>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>No SPK</th>
+            <th>Nama Pelanggan</th>
+            <th>Jenis Trouble</th>
+            <th>Perangkat</th>
+            <th>Tanggal Komplain</th>
+            <th>Kategori Cluster</th>
+            <th>Created By</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in rows %}
+          <tr>
+            <td>{{ item.no_spk }}</td>
+            <td>{{ item.nama_pelanggan }}</td>
+            <td>{{ item.jenis_trouble.value }}</td>
+            <td>{{ item.perangkat.value }}</td>
+            <td>{{ item.tanggal_komplain.strftime('%Y-%m-%d') if item.tanggal_komplain else '-' }}</td>
+            <td>
+              {% if item.kategori_cluster %}
+                <span class="badge bg-{{ 'success' if item.kategori_cluster.value == 'Ringan' else 'warning text-dark' if item.kategori_cluster.value == 'Sedang' else 'danger' }}">
+                  {{ item.kategori_cluster.value }}
+                </span>
+              {% else %}
+                <span class="text-muted">-</span>
+              {% endif %}
+            </td>
+            <td>{{ item.user.username if item.user else '-' }}</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="7" class="text-center text-muted">Tidak ada data.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <nav aria-label="Pagination">
+      <ul class="pagination justify-content-center mt-4">
+        {% set qs = query_string %}
+        {% if pagination.has_prev %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ pagination.prev_num }}{% if qs %}&{{ qs }}{% endif %}">Sebelumnya</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">Sebelumnya</span></li>
+        {% endif %}
+
+        {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+          {% if page_num %}
+          <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+            <a class="page-link" href="?page={{ page_num }}{% if qs %}&{{ qs }}{% endif %}">{{ page_num }}</a>
+          </li>
+          {% else %}
+          <li class="page-item disabled"><span class="page-link">…</span></li>
+          {% endif %}
+        {% endfor %}
+
+        {% if pagination.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ pagination.next_num }}{% if qs %}&{{ qs }}{% endif %}">Berikutnya</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">Berikutnya</span></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</div>
+{% endblock %}

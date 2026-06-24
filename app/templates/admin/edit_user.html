@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Edit User - Troubleshoot App{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="mb-4">
+    <h1 class="h3">Edit User</h1>
+    <p class="text-muted">Perbarui data akun pengguna.</p>
+  </div>
+
+  <div class="card shadow-sm p-4">
+    <form method="POST" action="{{ url_for('admin.edit_user', id=user.id) }}">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Username</label>
+          <input type="text" name="username" class="form-control" value="{{ user.username }}" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Role</label>
+          <select class="form-select" name="role" {% if own_account %}disabled{% endif %} required>
+            <option value="admin" {% if user.role.value == 'admin' %}selected{% endif %}>Admin</option>
+            <option value="teknisi" {% if user.role.value == 'teknisi' %}selected{% endif %}>Teknisi</option>
+            <option value="manajer" {% if user.role.value == 'manajer' %}selected{% endif %}>Manajer</option>
+          </select>
+        </div>
+        <div class="col-md-4 form-check align-self-end">
+          <input class="form-check-input" type="checkbox" id="is_active" name="is_active" {% if user.is_active %}checked{% endif %}>
+          <label class="form-check-label" for="is_active">Akun aktif</label>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+        <a href="{{ url_for('admin.users') }}" class="btn btn-outline-secondary">Batal</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

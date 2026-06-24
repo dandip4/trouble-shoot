@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}Clustering - Troubleshoot App{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="mb-4">
+    <h1 class="h3">Clustering</h1>
+    <p class="text-muted">Analisis clustering untuk troubleshoot jaringan.</p>
+  </div>
+
+  <div class="row gy-4">
+    <div class="col-12">
+      <div class="card shadow-sm p-4">
+        <h5>Elbow Method</h5>
+        <canvas id="elbowChart" height="120"></canvas>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card shadow-sm p-4">
+        <h5>DBI per K</h5>
+        <div class="table-responsive mt-3">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>K</th>
+                <th>WCSS</th>
+                <th>DBI</th>
+              </tr>
+            </thead>
+            <tbody id="dbiTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card shadow-sm p-4">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-3 gap-2">
+          <div>
+            <h5>Jalankan K-Means</h5>
+            <p class="text-muted mb-0">Hanya admin yang dapat menjalankan clustering.</p>
+          </div>
+          <form id="clustering-form" class="d-flex gap-2 align-items-center">
+            <label class="mb-0">Jumlah cluster</label>
+            <select class="form-select w-auto" name="k" id="kValue">
+              {% for i in range(2, 8) %}
+                <option value="{{ i }}" {% if i == 3 %}selected{% endif %}>{{ i }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary" {% if current_user.role.value != 'admin' %}disabled{% endif %}>Jalankan Clustering</button>
+          </form>
+        </div>
+
+        <div id="clusteringStatus" class="alert alert-secondary d-none" role="alert">
+          <span id="clusteringMessage">Sedang memproses clustering...</span>
+        </div>
+
+        <div id="clusteringResult" class="d-none mt-4">
+          <div class="row gy-3">
+            <div class="col-md-4">
+              <div class="card p-3 bg-light">
+                <strong>Tanggal</strong>
+                <div id="clusterDate">-</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card p-3 bg-light">
+                <strong>K</strong>
+                <div id="clusterK">-</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card p-3 bg-light">
+                <strong>DBI / Silhouette</strong>
+                <div id="clusterScores">-</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <h5>Distribusi per Cluster</h5>
+            <div class="table-responsive">
+              <table class="table table-bordered mt-2">
+                <thead>
+                  <tr>
+                    <th>Cluster</th>
+                    <th>Jumlah</th>
+                    <th>Kategori</th>
+                  </tr>
+                </thead>
+                <tbody id="clusterDistribution"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <h5>Hasil PCA</h5>
+            <canvas id="pcaChart" height="180"></canvas>
+          </div>
+
+          <div class="mt-4">
+            <h5>Interpretasi</h5>
+            <div id="clusterInterpretation" class="border rounded p-3 bg-white"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const elbowCtx = document.getElementById('elbowChart');
+  const pcaCtx = document.getElementById('pcaChart');
+  let elbowChart = null;
+  let pcaChart = null;
+
+  async function loadElbowData() {
+    const response = await fetch('{{ url_for("clustering.elbow_data") }}');
+    if (!response.ok) return;
+    const data = await response.json();
+    const labels = data.map(item => item.k);
+    const wcss = data.map(item => item.wcss);
+    const dbi = data.map(item => item.dbi);
+
+    if (elbowChart) elbowChart.destroy();
+    elbowChart = new Chart(elbowCtx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'WCSS',
+            data: wcss,
+            borderColor: '#1a3a5c',
+            backgroundColor: 'rgba(26,58,92,0.2)',
+            tension: 0.25,
+            fill: false,
+          },
+          {
+            label: 'DBI',
+            data: dbi,
+            borderColor: '#f8b400',
+            backgroundColor: 'rgba(248,180,0,0.2)',
+            tension: 0.25,
+            fill: false,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    const body = document.getElementById('dbiTableBody');
+    body.innerHTML = data.map(item => `
+      <tr>
+        <td>${item.k}</td>
+        <td>${item.wcss}</td>
+        <td>${item.dbi}</td>
+      </tr>`).join('');
+  }
+
+  function buildInterpretation(distribution) {
+    return distribution.map(item => `
+      <div class="mb-3">
+        <strong>Cluster ${item.cluster} (${item.kategori})</strong>
+        <p>Jumlah data: ${item.count}. Kategori cluster diartikan berdasarkan durasi rata-rata.</p>
+      </div>
+    `).join('');
+  }
+
+  function renderPcaChart(points) {
+    const clusters = [...new Set(points.map(item => item.cluster))].sort((a,b)=>a-b);
+    const datasets = clusters.map(cluster => {
+      const clusterPoints = points.filter(item => item.cluster === cluster);
+      return {
+        label: `Cluster ${cluster}`,
+        data: clusterPoints.map(item => ({ x: item.pc1, y: item.pc2, meta: item })),
+        backgroundColor: `hsl(${cluster * 60 % 360}, 70%, 45%)`,
+      };
+    });
+
+    if (pcaChart) pcaChart.destroy();
+    pcaChart = new Chart(pcaCtx, {
+      type: 'scatter',
+      data: { datasets },
+      options: {
+        responsive: true,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label(context) {
+                const item = context.raw.meta;
+                return `Cluster ${item.cluster}: ${item.jenis_trouble} / ${item.perangkat} / ${item.durasi} hari`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: { title: { display: true, text: 'PC1' } },
+          y: { title: { display: true, text: 'PC2' } }
+        }
+      }
+    });
+  }
+
+  async function loadPcaData() {
+    const response = await fetch('{{ url_for("clustering.pca_data") }}');
+    if (!response.ok) return [];
+    return await response.json();
+  }
+
+  document.getElementById('clustering-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const status = document.getElementById('clusteringStatus');
+    const result = document.getElementById('clusteringResult');
+    status.classList.remove('d-none');
+    status.classList.remove('alert-danger');
+    status.classList.add('alert-secondary');
+    document.getElementById('clusteringMessage').textContent = 'Sedang memproses clustering...';
+
+    const formData = new FormData(this);
+    const response = await fetch('{{ url_for("clustering.run_clustering") }}', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+    if (!response.ok || !data.success) {
+      status.classList.remove('alert-secondary');
+      status.classList.add('alert-danger');
+      document.getElementById('clusteringMessage').textContent = data.message || 'Terjadi kesalahan.';
+      return;
+    }
+
+    status.classList.add('d-none');
+    result.classList.remove('d-none');
+    document.getElementById('clusterDate').textContent = data.last_history.tanggal;
+    document.getElementById('clusterK').textContent = data.last_history.k;
+    document.getElementById('clusterScores').textContent = `${data.last_history.dbi} / ${data.last_history.silhouette}`;
+    document.getElementById('clusterDistribution').innerHTML = data.result.distribution.map(item => `
+      <tr>
+        <td>${item.cluster}</td>
+        <td>${item.count}</td>
+        <td>${item.kategori}</td>
+      </tr>
+    `).join('');
+    document.getElementById('clusterInterpretation').innerHTML = buildInterpretation(data.result.distribution);
+
+    const pcaData = await loadPcaData();
+    renderPcaChart(pcaData);
+  });
+
+  loadElbowData();
+</script>
+{% endblock %}

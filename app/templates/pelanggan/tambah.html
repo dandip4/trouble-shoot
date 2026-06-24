@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Tambah Pelanggan - Troubleshoot App{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Tambah Pelanggan Baru</h5>
+        </div>
+        <div class="card-body">
+          <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="mb-3">
+              {{ form.nama.label(class="form-label") }}
+              {% if form.nama.errors %}
+                {{ form.nama(class="form-control is-invalid") }}
+                <div class="invalid-feedback d-block">
+                  {% for error in form.nama.errors %}<span>{{ error }}</span>{% endfor %}
+                </div>
+              {% else %}
+                {{ form.nama(class="form-control") }}
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              {{ form.kontak.label(class="form-label") }}
+              {% if form.kontak.errors %}
+                {{ form.kontak(class="form-control is-invalid") }}
+                <div class="invalid-feedback d-block">
+                  {% for error in form.kontak.errors %}<span>{{ error }}</span>{% endfor %}
+                </div>
+              {% else %}
+                {{ form.kontak(class="form-control", placeholder="Contoh: 081234567890") }}
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              {{ form.email.label(class="form-label") }}
+              {% if form.email.errors %}
+                {{ form.email(class="form-control is-invalid") }}
+                <div class="invalid-feedback d-block">
+                  {% for error in form.email.errors %}<span>{{ error }}</span>{% endfor %}
+                </div>
+              {% else %}
+                {{ form.email(class="form-control", placeholder="Contoh: customer@example.com") }}
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              {{ form.lokasi.label(class="form-label") }}
+              {% if form.lokasi.errors %}
+                {{ form.lokasi(class="form-control is-invalid") }}
+                <div class="invalid-feedback d-block">
+                  {% for error in form.lokasi.errors %}<span>{{ error }}</span>{% endfor %}
+                </div>
+              {% else %}
+                {{ form.lokasi(class="form-control", placeholder="Contoh: Jakarta Pusat") }}
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              {{ form.departemen.label(class="form-label") }}
+              {% if form.departemen.errors %}
+                {{ form.departemen(class="form-control is-invalid") }}
+                <div class="invalid-feedback d-block">
+                  {% for error in form.departemen.errors %}<span>{{ error }}</span>{% endfor %}
+                </div>
+              {% else %}
+                {{ form.departemen(class="form-control", placeholder="Contoh: IT Department") }}
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              {{ form.alamat.label(class="form-label") }}
+              {{ form.alamat(class="form-control", rows="3", placeholder="Alamat lengkap pelanggan") }}
+            </div>
+
+            <div class="d-flex gap-2">
+              {{ form.submit(class="btn btn-primary") }}
+              <a href="{{ url_for('pelanggan.index') }}" class="btn btn-outline-secondary">Batal</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

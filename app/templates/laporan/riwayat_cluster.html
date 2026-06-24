@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Riwayat Clustering - Troubleshoot App{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="mb-4">
+    <h1 class="h3">Riwayat Clustering</h1>
+    <p class="text-muted">Catatan hasil clustering terakhir untuk audit dan analisis.</p>
+  </div>
+
+  <div class="card shadow-sm p-4 mb-4">
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>Tanggal Clustering</th>
+            <th>Jumlah Cluster</th>
+            <th>DBI</th>
+            <th>Silhouette</th>
+            <th>Created By</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for history in clustering_rows %}
+          <tr>
+            <td>{{ history.tanggal_clustering.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>{{ history.jumlah_cluster }}</td>
+            <td>{{ history.dbi_score or '-' }}</td>
+            <td>{{ history.silhouette_score or '-' }}</td>
+            <td>{{ history.user.username if history.user else '-' }}</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="5" class="text-center text-muted">Belum ada riwayat clustering.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Troubleshoot - Troubleshoot App{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="mb-4">
+    <h1 class="h3">Upload Excel Troubleshoot</h1>
+    <p class="text-muted">Unggah file .xlsx dengan format data troubleshoot.</p>
+  </div>
+
+  <div class="card shadow-sm p-4">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
+      <div class="mb-3">
+        {{ form.file.label(class_="form-label") }}
+        {{ form.file(class_="form-control") }}
+      </div>
+      <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+
+    {% if summary %}
+      <div class="mt-4 alert alert-info">{{ summary }}</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

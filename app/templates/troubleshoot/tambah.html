@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Tambah Troubleshoot - Troubleshoot App{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="mb-4">
+    <h1 class="h3">Tambah Troubleshoot</h1>
+    <p class="text-muted">Isi data troubleshoot baru secara manual.</p>
+  </div>
+
+  <div class="card shadow-sm p-4">
+    <form method="POST" id="troubleshoot-form">
+      {{ form.hidden_tag() }}
+      <div class="row g-3">
+        <div class="col-md-6">{{ form.no_spk.label(class_="form-label") }}{{ form.no_spk(class_="form-control") }}</div>
+        <div class="col-md-6">{{ form.nama_pelanggan.label(class_="form-label") }}{{ form.nama_pelanggan(class_="form-control") }}</div>
+        <div class="col-12">{{ form.informasi_trouble.label(class_="form-label") }}{{ form.informasi_trouble(class_="form-control", rows=3) }}</div>
+        <div class="col-md-4">{{ form.jenis_trouble.label(class_="form-label") }}{{ form.jenis_trouble(class_="form-select") }}</div>
+        <div class="col-md-4">{{ form.perangkat.label(class_="form-label") }}{{ form.perangkat(class_="form-select") }}</div>
+        <div class="col-md-4">{{ form.service.label(class_="form-label") }}{{ form.service(class_="form-select") }}</div>
+        <div class="col-md-6">{{ form.tanggal_komplain.label(class_="form-label") }}{{ form.tanggal_komplain(class_="form-control") }}</div>
+        <div class="col-md-6">{{ form.selesai_pengerjaan.label(class_="form-label") }}{{ form.selesai_pengerjaan(class_="form-control") }}</div>
+        <div class="col-md-6">{{ form.durasi_pengerjaan.label(class_="form-label") }}{{ form.durasi_pengerjaan(class_="form-control", readonly=True) }}</div>
+        <div class="col-12">{{ form.keterangan_action.label(class_="form-label") }}{{ form.keterangan_action(class_="form-control", rows=3) }}</div>
+      </div>
+      <button type="submit" class="btn btn-primary mt-4">Simpan</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const tanggalKomplain = document.getElementById('tanggal_komplain');
+  const selesaiPengerjaan = document.getElementById('selesai_pengerjaan');
+  const durasiField = document.getElementById('durasi_pengerjaan');
+
+  function calculateDuration() {
+    const start = new Date(tanggalKomplain.value);
+    const end = new Date(selesaiPengerjaan.value);
+    if (tanggalKomplain.value && selesaiPengerjaan.value) {
+      if (end < start) {
+        alert('Tanggal selesai tidak boleh sebelum tanggal komplain.');
+        durasiField.value = '';
+        return;
+      }
+      const diff = Math.round((end - start) / (1000 * 60 * 60 * 24));
+      durasiField.value = diff;
+    }
+  }
+
+  tanggalKomplain?.addEventListener('change', calculateDuration);
+  selesaiPengerjaan?.addEventListener('change', calculateDuration);
+</script>
+{% endblock %}
