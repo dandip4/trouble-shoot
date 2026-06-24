@@ -14,11 +14,13 @@
       {{ form.hidden_tag() }}
       <div class="row g-3">
         <div class="col-md-6">{{ form.no_spk.label(class_="form-label") }}{{ form.no_spk(class_="form-control") }}</div>
-        <div class="col-md-6">{{ form.nama_pelanggan.label(class_="form-label") }}{{ form.nama_pelanggan(class_="form-control") }}</div>
+        <div class="col-md-6">{{ form.pelanggan_id.label(class_="form-label") }}{{ form.pelanggan_id(class_="form-select") }}</div>
+        <div class="col-md-6">{{ form.perangkat_id.label(class_="form-label") }}{{ form.perangkat_id(class_="form-select") }}</div>
+        <div class="col-md-6">{{ form.perangkat_tipe.label(class_="form-label") }}{{ form.perangkat_tipe(class_="form-select") }}</div>
         <div class="col-12">{{ form.informasi_trouble.label(class_="form-label") }}{{ form.informasi_trouble(class_="form-control", rows=3) }}</div>
         <div class="col-md-4">{{ form.jenis_trouble.label(class_="form-label") }}{{ form.jenis_trouble(class_="form-select") }}</div>
-        <div class="col-md-4">{{ form.perangkat.label(class_="form-label") }}{{ form.perangkat(class_="form-select") }}</div>
         <div class="col-md-4">{{ form.service.label(class_="form-label") }}{{ form.service(class_="form-select") }}</div>
+        <div class="col-md-4"></div>
         <div class="col-md-6">{{ form.tanggal_komplain.label(class_="form-label") }}{{ form.tanggal_komplain(class_="form-control") }}</div>
         <div class="col-md-6">{{ form.selesai_pengerjaan.label(class_="form-label") }}{{ form.selesai_pengerjaan(class_="form-control") }}</div>
         <div class="col-md-6">{{ form.durasi_pengerjaan.label(class_="form-label") }}{{ form.durasi_pengerjaan(class_="form-control", readonly=True) }}</div>

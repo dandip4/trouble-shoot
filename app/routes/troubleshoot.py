@@ -8,7 +8,7 @@ from flask_login import login_required, current_user
 from sqlalchemy import or_
 from werkzeug.utils import secure_filename
 
-from ..models import Troubleshoot, User, db
+from ..models import Troubleshoot, User, Pelanggan, Perangkat, db
 from ..forms import TroubleshootForm, UploadForm, AssignTroubleForm, UpdateStatusForm
 from ..models.troubleshoot import (
     JenisTroubleEnum,
@@ -89,6 +89,11 @@ def tambah():
         return redirect(url_for("troubleshoot.index"))
 
     form = TroubleshootForm()
+    
+    # Populate dropdown choices from database
+    form.pelanggan_id.choices = [(p.id, f"{p.nama} ({p.kontak})") for p in Pelanggan.query.all()]
+    form.perangkat_id.choices = [(p.id, f"{p.nama} - {p.tipe}") for p in Perangkat.query.all()]
+    
     if form.validate_on_submit():
         if form.selesai_pengerjaan.data and form.selesai_pengerjaan.data < form.tanggal_komplain.data:
             flash("Tanggal selesai tidak boleh sebelum tanggal komplain.", "danger")
@@ -99,28 +104,37 @@ def tambah():
             return render_template("troubleshoot/tambah.html", form=form)
 
         try:
+            # Get pelanggan and perangkat from form
+            pelanggan = Pelanggan.query.get(form.pelanggan_id.data)
+            perangkat = Perangkat.query.get(form.perangkat_id.data)
+            
+            if not pelanggan or not perangkat:
+                flash("Pelanggan atau Perangkat tidak ditemukan.", "danger")
+                return render_template("troubleshoot/tambah.html", form=form)
+            
             entry = Troubleshoot(
                 no_spk=form.no_spk.data,
-                nama_pelanggan=form.nama_pelanggan.data,
+                nama_pelanggan=pelanggan.nama,
                 informasi_trouble=form.informasi_trouble.data,
                 jenis_trouble=JenisTroubleEnum[form.jenis_trouble.data.replace(" ", "_")],
-                perangkat=PerangkatEnum[form.perangkat.data],
+                perangkat=PerangkatEnum[form.perangkat_tipe.data],
                 service=ServiceEnum[form.service.data],
                 tanggal_komplain=form.tanggal_komplain.data,
                 selesai_pengerjaan=form.selesai_pengerjaan.data,
                 durasi_pengerjaan=form.durasi_pengerjaan.data,
                 keterangan_action=form.keterangan_action.data,
-                    # kategori_cluster is set by clustering process (admin) — do not accept manual input
-                    kategori_cluster=None,
+                kategori_cluster=None,
                 created_by=current_user.id,
+                pelanggan_id=pelanggan.id,
+                perangkat_id=perangkat.id,
             )
             db.session.add(entry)
             db.session.commit()
             flash("Data troubleshoot berhasil ditambahkan.", "success")
             return redirect(url_for("troubleshoot.index"))
-        except Exception:
+        except Exception as e:
             db.session.rollback()
-            flash("Terjadi kesalahan saat menyimpan data.", "danger")
+            flash(f"Terjadi kesalahan saat menyimpan data: {str(e)}", "danger")
 
     return render_template("troubleshoot/tambah.html", form=form)
 
@@ -134,6 +148,11 @@ def edit(id):
         return redirect(url_for("troubleshoot.index"))
 
     form = TroubleshootForm(obj=entry)
+    
+    # Populate dropdown choices
+    form.pelanggan_id.choices = [(p.id, f"{p.nama} ({p.kontak})") for p in Pelanggan.query.all()]
+    form.perangkat_id.choices = [(p.id, f"{p.nama} - {p.tipe}") for p in Perangkat.query.all()]
+    
     if form.validate_on_submit():
         if form.selesai_pengerjaan.data and form.selesai_pengerjaan.data < form.tanggal_komplain.data:
             flash("Tanggal selesai tidak boleh sebelum tanggal komplain.", "danger")
@@ -145,23 +164,32 @@ def edit(id):
             return render_template("troubleshoot/edit.html", form=form, entry=entry)
 
         try:
+            # Get pelanggan and perangkat from form
+            pelanggan = Pelanggan.query.get(form.pelanggan_id.data)
+            perangkat = Perangkat.query.get(form.perangkat_id.data)
+            
+            if not pelanggan or not perangkat:
+                flash("Pelanggan atau Perangkat tidak ditemukan.", "danger")
+                return render_template("troubleshoot/edit.html", form=form, entry=entry)
+            
             entry.no_spk = form.no_spk.data
-            entry.nama_pelanggan = form.nama_pelanggan.data
+            entry.nama_pelanggan = pelanggan.nama
             entry.informasi_trouble = form.informasi_trouble.data
             entry.jenis_trouble = JenisTroubleEnum[form.jenis_trouble.data.replace(" ", "_")]
-            entry.perangkat = PerangkatEnum[form.perangkat.data]
+            entry.perangkat = PerangkatEnum[form.perangkat_tipe.data]
             entry.service = ServiceEnum[form.service.data]
             entry.tanggal_komplain = form.tanggal_komplain.data
             entry.selesai_pengerjaan = form.selesai_pengerjaan.data
             entry.durasi_pengerjaan = form.durasi_pengerjaan.data
             entry.keterangan_action = form.keterangan_action.data
-            # Do not allow manual editing of kategori_cluster; clustering job will update it
+            entry.pelanggan_id = pelanggan.id
+            entry.perangkat_id = perangkat.id
             db.session.commit()
             flash("Data troubleshoot berhasil diperbarui.", "success")
             return redirect(url_for("troubleshoot.index"))
-        except Exception:
+        except Exception as e:
             db.session.rollback()
-            flash("Terjadi kesalahan saat memperbarui data.", "danger")
+            flash(f"Terjadi kesalahan saat memperbarui data: {str(e)}", "danger")
 
     if request.method == "GET":
         form.jenis_trouble.data = entry.jenis_trouble.value

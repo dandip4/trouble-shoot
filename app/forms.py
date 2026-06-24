@@ -6,7 +6,8 @@ from wtforms.validators import DataRequired, Optional, Length, Email
 
 class TroubleshootForm(FlaskForm):
     no_spk = StringField("No SPK", validators=[DataRequired(), Length(max=80)])
-    nama_pelanggan = StringField("Nama Pelanggan", validators=[DataRequired(), Length(max=150)])
+    pelanggan_id = SelectField("Pilih Pelanggan", validators=[DataRequired()], coerce=int)
+    perangkat_id = SelectField("Pilih Perangkat", validators=[DataRequired()], coerce=int)
     informasi_trouble = TextAreaField("Informasi Trouble", validators=[DataRequired()])
     jenis_trouble = SelectField("Jenis Trouble", validators=[DataRequired()], choices=[
         ("Human", "Human"),
@@ -15,7 +16,7 @@ class TroubleshootForm(FlaskForm):
         ("Software Issue", "Software Issue"),
         ("Network Issue", "Network Issue"),
     ])
-    perangkat = SelectField("Perangkat", validators=[DataRequired()], choices=[
+    perangkat_tipe = SelectField("Tipe Perangkat (Legacy)", validators=[DataRequired()], choices=[
         ("PC", "PC"),
         ("Laptop", "Laptop"),
         ("Printer", "Printer"),
