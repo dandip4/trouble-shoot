@@ -1,0 +1,101 @@
+No,Nama_Pelanggan,Informasi_Trouble,Jenis_Trouble,Perangkat,Service,Tanggal_Compliment_Pelanggan,Selesai_Pengerjaan,Durasi_Pengerjaan,Keterangan_Action,No_SPK
+1,Pelanggan_0105,Hardware Failure 48,Hardware Failure,Server,UP,2025-11-05 00:00:00,2025-11-13 00:00:00,8 Hari,Selesai,SPK-00001
+2,Pelanggan_0224,Hardware Failure 6,Hardware Failure,Server,UP,2025-10-08 00:00:00,2025-10-18 00:00:00,10 Hari,Selesai,SPK-00002
+3,Pelanggan_0719,Human Error 42,Human,Printer,UP,2026-04-02 00:00:00,2026-04-03 00:00:00,1 Hari,Selesai,SPK-00003
+4,Pelanggan_0778,Hardware Failure 1,Hardware Failure,Firewall,UP,2026-04-26 00:00:00,2026-05-05 00:00:00,9 Hari,Selesai,SPK-00004
+5,Pelanggan_0981,Software Issue 14,Software Issue,Server,UP,2025-11-09 00:00:00,2025-11-12 00:00:00,3 Hari,Selesai,SPK-00005
+6,Pelanggan_0619,Software Issue 23,Software Issue,PC,UP,2025-12-31 00:00:00,2026-01-02 00:00:00,2 Hari,Selesai,SPK-00006
+7,Pelanggan_0081,Config Issue 25,Configuration Issue,Accesspoint,UP,2025-11-01 00:00:00,2025-11-06 00:00:00,5 Hari,Selesai,SPK-00007
+8,Pelanggan_0678,Hardware Failure 3,Hardware Failure,Switch,UP,2025-10-18 00:00:00,2025-10-28 00:00:00,10 Hari,Selesai,SPK-00008
+9,Pelanggan_0390,Human Error 7,Human,Laptop,DOWN,2026-05-10 00:00:00,2026-05-11 00:00:00,1 Hari,Selesai,SPK-00009
+10,Pelanggan_0687,Config Issue 14,Configuration Issue,Router,UP,2025-12-30 00:00:00,2026-01-03 00:00:00,4 Hari,Selesai,SPK-00010
+11,Pelanggan_0547,Config Issue 11,Configuration Issue,Router,UP,2026-03-12 00:00:00,2026-03-17 00:00:00,5 Hari,Selesai,SPK-00011
+12,Pelanggan_0705,Software Issue 41,Software Issue,PC,UP,2026-05-25 00:00:00,2026-05-28 00:00:00,3 Hari,Selesai,SPK-00012
+13,Pelanggan_0411,Hardware Failure 21,Hardware Failure,Switch,UP,2025-10-09 00:00:00,2025-10-15 00:00:00,6 Hari,Selesai,SPK-00013
+14,Pelanggan_0672,Config Issue 14,Configuration Issue,Accesspoint,DOWN,2025-12-20 00:00:00,2025-12-25 00:00:00,5 Hari,Selesai,SPK-00014
+15,Pelanggan_0575,Hardware Failure 48,Hardware Failure,Router,UP,2025-12-03 00:00:00,2025-12-10 00:00:00,7 Hari,Selesai,SPK-00015
+16,Pelanggan_0522,Hardware Failure 9,Hardware Failure,Router,UP,2025-11-26 00:00:00,2025-12-06 00:00:00,10 Hari,Selesai,SPK-00016
+17,Pelanggan_0433,Hardware Failure 44,Hardware Failure,Server,UP,2025-11-10 00:00:00,2025-11-16 00:00:00,6 Hari,Selesai,SPK-00017
+18,Pelanggan_0258,Hardware Failure 34,Hardware Failure,Router,UP,2026-01-28 00:00:00,2026-02-06 00:00:00,9 Hari,Selesai,SPK-00018
+19,Pelanggan_0274,Network Issue 49,Network Issue,Router,UP,2026-02-15 00:00:00,2026-02-19 00:00:00,4 Hari,Selesai,SPK-00019
+20,Pelanggan_0004,Software Issue 30,Software Issue,Laptop,UP,2025-11-10 00:00:00,2025-11-12 00:00:00,2 Hari,Selesai,SPK-00020
+21,Pelanggan_0306,Network Issue 41,Network Issue,Accesspoint,UP,2025-10-28 00:00:00,2025-11-02 00:00:00,5 Hari,Selesai,SPK-00021
+22,Pelanggan_0166,Software Issue 49,Software Issue,Server,UP,2026-01-04 00:00:00,2026-01-08 00:00:00,4 Hari,Selesai,SPK-00022
+23,Pelanggan_0952,Hardware Failure 8,Hardware Failure,Server,UP,2025-10-05 00:00:00,2025-10-15 00:00:00,10 Hari,Selesai,SPK-00023
+24,Pelanggan_0970,Config Issue 37,Configuration Issue,Switch,UP,2026-05-13 00:00:00,2026-05-16 00:00:00,3 Hari,Selesai,SPK-00024
+25,Pelanggan_0785,Human Error 35,Human,Printer,DOWN,2026-04-13 00:00:00,2026-04-15 00:00:00,2 Hari,Selesai,SPK-00025
+26,Pelanggan_0541,Human Error 17,Human,Printer,DOWN,2025-11-12 00:00:00,2025-11-14 00:00:00,2 Hari,Selesai,SPK-00026
+27,Pelanggan_0707,Network Issue 47,Network Issue,Firewall,DOWN,2026-04-12 00:00:00,2026-04-17 00:00:00,5 Hari,Selesai,SPK-00027
+28,Pelanggan_0449,Human Error 24,Human,Laptop,DOWN,2026-03-16 00:00:00,2026-03-18 00:00:00,2 Hari,Selesai,SPK-00028
+29,Pelanggan_0022,Network Issue 22,Network Issue,Firewall,UP,2025-10-17 00:00:00,2025-10-21 00:00:00,4 Hari,Selesai,SPK-00029
+30,Pelanggan_0647,Hardware Failure 46,Hardware Failure,Firewall,UP,2025-10-19 00:00:00,2025-10-29 00:00:00,10 Hari,Selesai,SPK-00030
+31,Pelanggan_0244,Human Error 33,Human,PC,DOWN,2025-10-19 00:00:00,2025-10-20 00:00:00,1 Hari,Selesai,SPK-00031
+32,Pelanggan_0591,Config Issue 37,Configuration Issue,Switch,UP,2026-04-04 00:00:00,2026-04-07 00:00:00,3 Hari,Selesai,SPK-00032
+33,Pelanggan_0442,Hardware Failure 43,Hardware Failure,Router,UP,2025-10-25 00:00:00,2025-11-03 00:00:00,9 Hari,Selesai,SPK-00033
+34,Pelanggan_0670,Config Issue 44,Configuration Issue,Switch,DOWN,2025-10-14 00:00:00,2025-10-18 00:00:00,4 Hari,Selesai,SPK-00034
+35,Pelanggan_0255,Network Issue 7,Network Issue,Router,UP,2025-12-26 00:00:00,2025-12-30 00:00:00,4 Hari,Selesai,SPK-00035
+36,Pelanggan_0474,Human Error 18,Human,Printer,UP,2025-11-16 00:00:00,2025-11-18 00:00:00,2 Hari,Selesai,SPK-00036
+37,Pelanggan_0101,Human Error 36,Human,PC,DOWN,2026-05-08 00:00:00,2026-05-10 00:00:00,2 Hari,Selesai,SPK-00037
+38,Pelanggan_0870,Human Error 49,Human,Printer,DOWN,2026-05-26 00:00:00,2026-05-27 00:00:00,1 Hari,Selesai,SPK-00038
+39,Pelanggan_0925,Human Error 26,Human,Laptop,UP,2026-05-10 00:00:00,2026-05-12 00:00:00,2 Hari,Selesai,SPK-00039
+40,Pelanggan_0293,Human Error 30,Human,Laptop,DOWN,2025-12-07 00:00:00,2025-12-08 00:00:00,1 Hari,Selesai,SPK-00040
+41,Pelanggan_0195,Config Issue 10,Configuration Issue,Router,UP,2026-02-02 00:00:00,2026-02-07 00:00:00,5 Hari,Selesai,SPK-00041
+42,Pelanggan_0322,Config Issue 48,Configuration Issue,Accesspoint,UP,2025-10-16 00:00:00,2025-10-21 00:00:00,5 Hari,Selesai,SPK-00042
+43,Pelanggan_0162,Human Error 34,Human,Printer,UP,2026-05-07 00:00:00,2026-05-09 00:00:00,2 Hari,Selesai,SPK-00043
+44,Pelanggan_0070,Human Error 39,Human,Printer,DOWN,2025-10-18 00:00:00,2025-10-19 00:00:00,1 Hari,Selesai,SPK-00044
+45,Pelanggan_0253,Hardware Failure 37,Hardware Failure,Firewall,UP,2026-05-16 00:00:00,2026-05-25 00:00:00,9 Hari,Selesai,SPK-00045
+46,Pelanggan_0579,Hardware Failure 38,Hardware Failure,Server,UP,2026-03-18 00:00:00,2026-03-28 00:00:00,10 Hari,Selesai,SPK-00046
+47,Pelanggan_0272,Hardware Failure 16,Hardware Failure,Switch,UP,2025-12-20 00:00:00,2025-12-27 00:00:00,7 Hari,Selesai,SPK-00047
+48,Pelanggan_0959,Config Issue 49,Configuration Issue,Router,UP,2025-12-20 00:00:00,2025-12-25 00:00:00,5 Hari,Selesai,SPK-00048
+49,Pelanggan_0551,Human Error 5,Human,Laptop,DOWN,2025-10-26 00:00:00,2025-10-29 00:00:00,3 Hari,Selesai,SPK-00049
+50,Pelanggan_0901,Human Error 5,Human,Laptop,DOWN,2026-05-14 00:00:00,2026-05-15 00:00:00,1 Hari,Selesai,SPK-00050
+51,Pelanggan_0310,Human Error 46,Human,Laptop,UP,2026-02-17 00:00:00,2026-02-18 00:00:00,1 Hari,Selesai,SPK-00051
+52,Pelanggan_0962,Hardware Failure 7,Hardware Failure,Server,UP,2026-03-19 00:00:00,2026-03-29 00:00:00,10 Hari,Selesai,SPK-00052
+53,Pelanggan_0160,Network Issue 36,Network Issue,Accesspoint,DOWN,2026-04-09 00:00:00,2026-04-13 00:00:00,4 Hari,Selesai,SPK-00053
+54,Pelanggan_0650,Config Issue 44,Configuration Issue,Router,UP,2025-11-22 00:00:00,2025-11-25 00:00:00,3 Hari,Selesai,SPK-00054
+55,Pelanggan_0095,Network Issue 4,Network Issue,Firewall,DOWN,2026-05-05 00:00:00,2026-05-11 00:00:00,6 Hari,Selesai,SPK-00055
+56,Pelanggan_0653,Hardware Failure 9,Hardware Failure,Switch,UP,2026-04-16 00:00:00,2026-04-22 00:00:00,6 Hari,Selesai,SPK-00056
+57,Pelanggan_0010,Network Issue 36,Network Issue,Switch,UP,2026-01-18 00:00:00,2026-01-25 00:00:00,7 Hari,Selesai,SPK-00057
+58,Pelanggan_0597,Human Error 24,Human,Printer,UP,2026-05-02 00:00:00,2026-05-03 00:00:00,1 Hari,Selesai,SPK-00058
+59,Pelanggan_0921,Hardware Failure 3,Hardware Failure,Router,UP,2026-01-02 00:00:00,2026-01-09 00:00:00,7 Hari,Selesai,SPK-00059
+60,Pelanggan_0574,Config Issue 50,Configuration Issue,Router,UP,2025-12-30 00:00:00,2026-01-02 00:00:00,3 Hari,Selesai,SPK-00060
+61,Pelanggan_0820,Network Issue 11,Network Issue,Firewall,DOWN,2025-11-30 00:00:00,2025-12-05 00:00:00,5 Hari,Selesai,SPK-00061
+62,Pelanggan_0802,Software Issue 22,Software Issue,Laptop,UP,2026-05-25 00:00:00,2026-05-27 00:00:00,2 Hari,Selesai,SPK-00062
+63,Pelanggan_0392,Network Issue 7,Network Issue,Switch,UP,2026-03-29 00:00:00,2026-04-04 00:00:00,6 Hari,Selesai,SPK-00063
+64,Pelanggan_0359,Network Issue 30,Network Issue,Firewall,UP,2026-05-24 00:00:00,2026-05-29 00:00:00,5 Hari,Selesai,SPK-00064
+65,Pelanggan_0337,Config Issue 26,Configuration Issue,Accesspoint,UP,2025-11-19 00:00:00,2025-11-22 00:00:00,3 Hari,Selesai,SPK-00065
+66,Pelanggan_0696,Config Issue 26,Configuration Issue,Accesspoint,UP,2026-02-08 00:00:00,2026-02-12 00:00:00,4 Hari,Selesai,SPK-00066
+67,Pelanggan_0595,Network Issue 12,Network Issue,Accesspoint,UP,2025-12-06 00:00:00,2025-12-10 00:00:00,4 Hari,Selesai,SPK-00067
+68,Pelanggan_0747,Network Issue 23,Network Issue,Accesspoint,UP,2026-01-20 00:00:00,2026-01-24 00:00:00,4 Hari,Selesai,SPK-00068
+69,Pelanggan_0922,Software Issue 25,Software Issue,Laptop,DOWN,2025-10-30 00:00:00,2025-11-03 00:00:00,4 Hari,Selesai,SPK-00069
+70,Pelanggan_0948,Hardware Failure 34,Hardware Failure,Switch,UP,2025-10-01 00:00:00,2025-10-07 00:00:00,6 Hari,Selesai,SPK-00070
+71,Pelanggan_0202,Software Issue 43,Software Issue,Server,DOWN,2026-04-07 00:00:00,2026-04-11 00:00:00,4 Hari,Selesai,SPK-00071
+72,Pelanggan_0680,Config Issue 21,Configuration Issue,Accesspoint,DOWN,2026-03-09 00:00:00,2026-03-14 00:00:00,5 Hari,Selesai,SPK-00072
+73,Pelanggan_0335,Software Issue 27,Software Issue,Server,UP,2026-03-20 00:00:00,2026-03-23 00:00:00,3 Hari,Selesai,SPK-00073
+74,Pelanggan_0963,Config Issue 43,Configuration Issue,Switch,UP,2026-01-16 00:00:00,2026-01-21 00:00:00,5 Hari,Selesai,SPK-00074
+75,Pelanggan_0562,Config Issue 26,Configuration Issue,Router,UP,2025-12-17 00:00:00,2025-12-20 00:00:00,3 Hari,Selesai,SPK-00075
+76,Pelanggan_0622,Software Issue 38,Software Issue,Laptop,UP,2026-04-20 00:00:00,2026-04-23 00:00:00,3 Hari,Selesai,SPK-00076
+77,Pelanggan_0485,Hardware Failure 33,Hardware Failure,Router,UP,2025-11-24 00:00:00,2025-12-03 00:00:00,9 Hari,Selesai,SPK-00077
+78,Pelanggan_0680,Software Issue 33,Software Issue,Server,UP,2025-12-12 00:00:00,2025-12-14 00:00:00,2 Hari,Selesai,SPK-00078
+79,Pelanggan_0689,Hardware Failure 16,Hardware Failure,Switch,DOWN,2026-04-11 00:00:00,2026-04-17 00:00:00,6 Hari,Selesai,SPK-00079
+80,Pelanggan_0626,Config Issue 31,Configuration Issue,Accesspoint,UP,2025-12-02 00:00:00,2025-12-05 00:00:00,3 Hari,Selesai,SPK-00080
+81,Pelanggan_0200,Software Issue 37,Software Issue,PC,UP,2026-03-11 00:00:00,2026-03-14 00:00:00,3 Hari,Selesai,SPK-00081
+82,Pelanggan_0705,Software Issue 42,Software Issue,Laptop,UP,2025-11-07 00:00:00,2025-11-10 00:00:00,3 Hari,Selesai,SPK-00082
+83,Pelanggan_0531,Human Error 45,Human,PC,UP,2026-04-24 00:00:00,2026-04-26 00:00:00,2 Hari,Selesai,SPK-00083
+84,Pelanggan_0684,Hardware Failure 30,Hardware Failure,Firewall,UP,2026-04-24 00:00:00,2026-04-30 00:00:00,6 Hari,Selesai,SPK-00084
+85,Pelanggan_0437,Hardware Failure 33,Hardware Failure,Switch,UP,2026-04-03 00:00:00,2026-04-12 00:00:00,9 Hari,Selesai,SPK-00085
+86,Pelanggan_0461,Software Issue 31,Software Issue,Server,DOWN,2026-04-09 00:00:00,2026-04-12 00:00:00,3 Hari,Selesai,SPK-00086
+87,Pelanggan_0497,Config Issue 34,Configuration Issue,Accesspoint,UP,2026-04-18 00:00:00,2026-04-23 00:00:00,5 Hari,Selesai,SPK-00087
+88,Pelanggan_0279,Hardware Failure 16,Hardware Failure,Switch,UP,2025-12-13 00:00:00,2025-12-22 00:00:00,9 Hari,Selesai,SPK-00088
+89,Pelanggan_0711,Config Issue 25,Configuration Issue,Router,UP,2025-11-29 00:00:00,2025-12-02 00:00:00,3 Hari,Selesai,SPK-00089
+90,Pelanggan_0478,Human Error 35,Human,PC,UP,2025-12-24 00:00:00,2025-12-25 00:00:00,1 Hari,Selesai,SPK-00090
+91,Pelanggan_0969,Config Issue 38,Configuration Issue,Accesspoint,UP,2026-04-16 00:00:00,2026-04-20 00:00:00,4 Hari,Selesai,SPK-00091
+92,Pelanggan_0772,Hardware Failure 20,Hardware Failure,Router,UP,2025-12-30 00:00:00,2026-01-08 00:00:00,9 Hari,Selesai,SPK-00092
+93,Pelanggan_0920,Config Issue 39,Configuration Issue,Switch,UP,2026-02-17 00:00:00,2026-02-22 00:00:00,5 Hari,Selesai,SPK-00093
+94,Pelanggan_0345,Human Error 25,Human,PC,UP,2025-10-08 00:00:00,2025-10-10 00:00:00,2 Hari,Selesai,SPK-00094
+95,Pelanggan_0638,Hardware Failure 9,Hardware Failure,Router,DOWN,2026-05-24 00:00:00,2026-05-31 00:00:00,7 Hari,Selesai,SPK-00095
+96,Pelanggan_0659,Hardware Failure 6,Hardware Failure,Router,UP,2025-10-07 00:00:00,2025-10-17 00:00:00,10 Hari,Selesai,SPK-00096
+97,Pelanggan_0217,Config Issue 21,Configuration Issue,Switch,UP,2026-01-06 00:00:00,2026-01-09 00:00:00,3 Hari,Selesai,SPK-00097
+98,Pelanggan_0259,Hardware Failure 27,Hardware Failure,Switch,UP,2026-05-01 00:00:00,2026-05-10 00:00:00,9 Hari,Selesai,SPK-00098
+99,Pelanggan_0230,Software Issue 23,Software Issue,Laptop,UP,2025-10-14 00:00:00,2025-10-16 00:00:00,2 Hari,Selesai,SPK-00099
+100,Pelanggan_0637,Hardware Failure 2,Hardware Failure,Server,DOWN,2025-11-21 00:00:00,2025-11-27 00:00:00,6 Hari,Selesai,SPK-00100

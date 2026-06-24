@@ -120,8 +120,12 @@ class ClusteringService:
 
         cluster_info = []
         for cluster_idx in range(selected_k):
-            centroid = cluster_centers[cluster_idx]
-            avg_duration = centroid[0]
+            # Calculate average duration directly from data points in this cluster
+            cluster_mask = df["cluster_id"] == cluster_idx + 1
+            cluster_durations = df[cluster_mask]["durasi_value"]
+            avg_duration = cluster_durations.mean() if len(cluster_durations) > 0 else 0
+            
+            # Determine category based on average duration
             if avg_duration <= 2:
                 kategori = "Ringan"
             elif avg_duration <= 5:

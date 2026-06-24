@@ -189,7 +189,7 @@ def seed_database():
         print("🔧 Adding troubleshoot records...")
         count = 0
         
-        # Create troubleshoot data spanning last 3 months
+        # Create troubleshoot data spanning last 3 months with varied durations
         base_date = datetime.now()
         for days_ago in range(90, 0, -1):
             num_tickets_today = randint(0, 3)  # 0-3 tickets per day
@@ -208,6 +208,16 @@ def seed_database():
                 if Troubleshoot.query.filter_by(no_spk=no_spk).first():
                     continue
                 
+                # Distribute durations to create variation in categories
+                # Ringan (≤2 days): 30%, Sedang (2-5 days): 40%, Berat (>5 days): 30%
+                duration_category = randint(1, 100)
+                if duration_category <= 30:
+                    durasi = randint(1, 2)  # Ringan
+                elif duration_category <= 70:
+                    durasi = randint(2, 5)  # Sedang
+                else:
+                    durasi = randint(6, 10)  # Berat
+                
                 trouble = Troubleshoot(
                     no_spk=no_spk,
                     nama_pelanggan=pelanggan.nama,
@@ -216,8 +226,8 @@ def seed_database():
                     perangkat=choice(PERANGKAT_ENUM),
                     service=choice(SERVICE_ENUM),
                     tanggal_komplain=created_date,  # DateTime, not date
-                    selesai_pengerjaan=(created_date + timedelta(days=randint(1, 5))) if randint(0, 1) else None,
-                    durasi_pengerjaan=randint(1, 7),
+                    selesai_pengerjaan=(created_date + timedelta(days=durasi)) if randint(0, 1) else None,
+                    durasi_pengerjaan=durasi,
                     keterangan_action=choice(ACTIONS),
                     kategori_cluster=choice(KATEGORI_ENUM),
                     status=choice(STATUS_ENUM),
