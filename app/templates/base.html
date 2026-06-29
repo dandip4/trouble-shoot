@@ -96,12 +96,17 @@
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script>
       window.addEventListener('DOMContentLoaded', () => {
+        // Auto-close alerts after 5 seconds
         document.querySelectorAll('.alert').forEach(alert => {
           setTimeout(() => {
             const bsAlert = new bootstrap.Alert(alert);
             bsAlert.close();
           }, 5000);
         });
+
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
       });
     </script>
     {% block scripts %}{% endblock %}

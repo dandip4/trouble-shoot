@@ -86,27 +86,36 @@
             </span>
           </td>
           <td>
-            <div class="btn-group btn-group-sm" role="group">
-              <a href="{{ url_for('troubleshoot.edit', id=item.id) }}" class="btn btn-outline-primary" title="Edit">
-                <i class="bi bi-pencil-square"></i>
+            <div class="btn-group" role="group">
+              <a href="{{ url_for('troubleshoot.edit', id=item.id) }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                <i class="bi bi-pencil"></i> Edit
               </a>
               {% if current_user.role.value == 'admin' %}
-                <a href="{{ url_for('troubleshoot.assign', id=item.id) }}" class="btn btn-outline-success" title="Assign">
-                  <i class="bi bi-person-plus"></i>
+                <a href="{{ url_for('troubleshoot.assign', id=item.id) }}" class="btn btn-sm btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Assign ke Teknisi">
+                  <i class="bi bi-person-check"></i> Assign
                 </a>
               {% endif %}
               {% if current_user.role.value in ['admin', 'teknisi'] and item.assigned_to %}
-                <a href="{{ url_for('troubleshoot.update_status', id=item.id) }}" class="btn btn-outline-warning" title="Update Status">
-                  <i class="bi bi-arrow-repeat"></i>
+                <a href="{{ url_for('troubleshoot.update_status', id=item.id) }}" class="btn btn-sm btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Update Status">
+                  <i class="bi bi-arrow-repeat"></i> Status
                 </a>
               {% endif %}
-              {% if current_user.role.value != 'manajer' and (current_user.role.value == 'admin' or item.created_by == current_user.id) %}
-                <form method="POST" action="{{ url_for('troubleshoot.hapus', id=item.id) }}" onsubmit="return confirm('Hapus data ini?');" style="display: inline;">
-                  <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </form>
-              {% endif %}
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  {% if current_user.role.value != 'manajer' and (current_user.role.value == 'admin' or item.created_by == current_user.id) %}
+                    <li>
+                      <form method="POST" action="{{ url_for('troubleshoot.hapus', id=item.id) }}" onsubmit="return confirm('Yakin ingin menghapus data ini?');" style="display: inline;">
+                        <button type="submit" class="dropdown-item text-danger" style="border: none; background: none; cursor: pointer;">
+                          <i class="bi bi-trash"></i> Hapus
+                        </button>
+                      </form>
+                    </li>
+                  {% endif %}
+                </ul>
+              </div>
             </div>
           </td>
         </tr>

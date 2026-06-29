@@ -94,12 +94,12 @@
             </td>
             <td>{{ item.tanggal_komplain.strftime('%d-%m-%Y') }}</td>
             <td>
-              <div class="btn-group btn-group-sm" role="group">
-                <a href="{{ url_for('troubleshoot.update_status', id=item.id) }}" class="btn btn-outline-primary" title="Update Status">
-                  <i class="bi bi-pencil"></i>
+              <div class="btn-group" role="group">
+                <a href="{{ url_for('troubleshoot.update_status', id=item.id) }}" class="btn btn-sm btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Update Status">
+                  <i class="bi bi-arrow-repeat"></i> Status
                 </a>
-                <a href="{{ url_for('troubleshoot.edit', id=item.id) }}" class="btn btn-outline-secondary" title="Edit">
-                  <i class="bi bi-pencil-square"></i>
+                <a href="{{ url_for('troubleshoot.edit', id=item.id) }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                  <i class="bi bi-pencil"></i> Edit
                 </a>
               </div>
             </td>
