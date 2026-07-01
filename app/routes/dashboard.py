@@ -27,6 +27,7 @@ def index():
         "Ringan": query.filter(Troubleshoot.kategori_cluster == KategoriClusterEnum.Ringan).count(),
         "Sedang": query.filter(Troubleshoot.kategori_cluster == KategoriClusterEnum.Sedang).count(),
         "Berat": query.filter(Troubleshoot.kategori_cluster == KategoriClusterEnum.Berat).count(),
+        "Sangat Berat": query.filter(Troubleshoot.kategori_cluster == KategoriClusterEnum.Sangat_Berat).count(),
     }
 
     per_jenis_trouble = {
@@ -66,7 +67,7 @@ def index():
         trend_bulanan.append({"bulan": month_label, "jumlah": count})
 
     rata_durasi_per_kategori = {}
-    for kategori in [KategoriClusterEnum.Ringan, KategoriClusterEnum.Sedang, KategoriClusterEnum.Berat]:
+    for kategori in [KategoriClusterEnum.Ringan, KategoriClusterEnum.Sedang, KategoriClusterEnum.Berat, KategoriClusterEnum.Sangat_Berat]:
         avg_duration = (
             query
             .filter(Troubleshoot.kategori_cluster == kategori)

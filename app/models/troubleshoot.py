@@ -30,6 +30,7 @@ class KategoriClusterEnum(Enum):
     Ringan = "Ringan"
     Sedang = "Sedang"
     Berat = "Berat"
+    Sangat_Berat = "Sangat Berat"
 
 
 class StatusTroubleEnum(Enum):

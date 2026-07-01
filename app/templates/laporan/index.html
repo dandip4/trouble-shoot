@@ -32,6 +32,7 @@
           <option value="Ringan" {% if selected_kategori == 'Ringan' %}selected{% endif %}>Ringan</option>
           <option value="Sedang" {% if selected_kategori == 'Sedang' %}selected{% endif %}>Sedang</option>
           <option value="Berat" {% if selected_kategori == 'Berat' %}selected{% endif %}>Berat</option>
+          <option value="Sangat Berat" {% if selected_kategori == 'Sangat Berat' %}selected{% endif %}>Sangat Berat</option>
         </select>
       </div>
       <div class="col-md-2">
@@ -73,6 +74,10 @@
           <li class="list-group-item d-flex justify-content-between align-items-center">
             Berat
             <span class="badge bg-danger">{{ summary.kategori.Berat or 0 }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Sangat Berat
+            <span class="badge bg-dark">{{ summary.kategori['Sangat Berat'] or 0 }}</span>
           </li>
         </ul>
       </div>
@@ -130,7 +135,7 @@
             <td>{{ item.tanggal_komplain.strftime('%Y-%m-%d') if item.tanggal_komplain else '-' }}</td>
             <td>
               {% if item.kategori_cluster %}
-                <span class="badge bg-{{ 'success' if item.kategori_cluster.value == 'Ringan' else 'warning text-dark' if item.kategori_cluster.value == 'Sedang' else 'danger' }}">
+                <span class="badge bg-{{ 'success' if item.kategori_cluster.value == 'Ringan' else 'warning text-dark' if item.kategori_cluster.value == 'Sedang' else 'danger' if item.kategori_cluster.value == 'Berat' else 'dark' }}">
                   {{ item.kategori_cluster.value }}
                 </span>
               {% else %}

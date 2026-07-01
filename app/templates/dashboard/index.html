@@ -72,6 +72,18 @@
       </div>
     </div>
 
+    <div class="col-12 col-md-3">
+      <div class="card shadow-sm p-4 border-0">
+        <div class="d-flex align-items-center gap-3">
+          <div class="display-5 text-dark"><i class="bi bi-shield-exclamation"></i></div>
+          <div>
+            <small class="text-muted">Kategori Sangat Berat</small>
+            <div class="fs-2 fw-semibold" id="count-sangat-berat">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="col-12 col-lg-6">
       <div class="card shadow-sm p-4">
         <h5>Jenis Trouble</h5>
@@ -130,7 +142,7 @@
                 <td>{{ item.perangkat.value }}</td>
                 <td>
                   {% if item.kategori_cluster %}
-                    <span class="badge bg-{{ 'success' if item.kategori_cluster.value == 'Ringan' else 'warning text-dark' if item.kategori_cluster.value == 'Sedang' else 'danger' }}">
+                    <span class="badge bg-{{ 'success' if item.kategori_cluster.value == 'Ringan' else 'warning text-dark' if item.kategori_cluster.value == 'Sedang' else 'danger' if item.kategori_cluster.value == 'Berat' else 'dark' }}">
                       {{ item.kategori_cluster.value }}
                     </span>
                   {% else %}
@@ -168,6 +180,7 @@
     { id: 'count-berat', value: perKategori.Berat },
     { id: 'count-sedang', value: perKategori.Sedang },
     { id: 'count-ringan', value: perKategori.Ringan },
+    { id: 'count-sangat-berat', value: perKategori['Sangat Berat'] || 0 },
   ];
 
   function animateCount(id, value) {

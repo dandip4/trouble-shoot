@@ -10,6 +10,15 @@ from ..services.export_service import ExportService
 laporan_bp = Blueprint("laporan", __name__, template_folder="../templates", url_prefix="/laporan")
 
 
+def get_kategori_enum(value):
+    if not value:
+        return None
+    try:
+        return KategoriClusterEnum(value)
+    except ValueError:
+        return None
+
+
 def build_filter(query):
     dari = request.args.get("dari")
     sampai = request.args.get("sampai")
@@ -49,10 +58,9 @@ def build_filter(query):
         if enum_perangkat:
             query = query.filter(Troubleshoot.perangkat.in_(enum_perangkat))
     if kategori and kategori != "Semua":
-        try:
-            query = query.filter(Troubleshoot.kategori_cluster == KategoriClusterEnum[kategori])
-        except KeyError:
-            pass
+        kategori_enum = get_kategori_enum(kategori)
+        if kategori_enum is not None:
+            query = query.filter(Troubleshoot.kategori_cluster == kategori_enum)
 
     # Technician only sees their assigned tasks
     if current_user.role.value == "teknisi":
@@ -74,6 +82,7 @@ def index():
             "Ringan": query.filter(Troubleshoot.kategori_cluster == KategoriClusterEnum.Ringan).count(),
             "Sedang": query.filter(Troubleshoot.kategori_cluster == KategoriClusterEnum.Sedang).count(),
             "Berat": query.filter(Troubleshoot.kategori_cluster == KategoriClusterEnum.Berat).count(),
+            "Sangat Berat": query.filter(Troubleshoot.kategori_cluster == KategoriClusterEnum.Sangat_Berat).count(),
         },
         "jenis": {},
         "perangkat": {},
@@ -131,6 +140,7 @@ def export_excel():
             "Ringan": query.filter(Troubleshoot.kategori_cluster == KategoriClusterEnum.Ringan).count(),
             "Sedang": query.filter(Troubleshoot.kategori_cluster == KategoriClusterEnum.Sedang).count(),
             "Berat": query.filter(Troubleshoot.kategori_cluster == KategoriClusterEnum.Berat).count(),
+            "Sangat Berat": query.filter(Troubleshoot.kategori_cluster == KategoriClusterEnum.Sangat_Berat).count(),
         },
         "jenis": {},
         "perangkat": {},

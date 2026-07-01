@@ -38,6 +38,15 @@ def parse_duration(value):
     return None
 
 
+def get_kategori_filter_enum(value):
+    if not value:
+        return None
+    try:
+        return KategoriClusterEnum(value)
+    except ValueError:
+        return None
+
+
 def can_modify(entry):
     if current_user.role.value == "admin":
         return True
@@ -69,7 +78,9 @@ def index():
         )
 
     if kategori_filter:
-        query = query.filter_by(kategori_cluster=kategori_filter)
+        kategori_enum = get_kategori_filter_enum(kategori_filter)
+        if kategori_enum is not None:
+            query = query.filter_by(kategori_cluster=kategori_enum)
 
     pagination = query.order_by(Troubleshoot.created_at.desc()).paginate(page=page, per_page=15)
 
@@ -193,8 +204,10 @@ def edit(id):
 
     if request.method == "GET":
         form.jenis_trouble.data = entry.jenis_trouble.value
-        form.perangkat.data = entry.perangkat.value
+        form.perangkat_tipe.data = entry.perangkat.value
         form.service.data = entry.service.value
+        form.pelanggan_id.data = entry.pelanggan_id
+        form.perangkat_id.data = entry.perangkat_id
 
     return render_template("troubleshoot/edit.html", form=form, entry=entry)
 

@@ -43,13 +43,14 @@
             <p class="text-muted mb-0">Hanya admin yang dapat menjalankan clustering.</p>
           </div>
           <form id="clustering-form" class="d-flex gap-2 align-items-center">
-            <label class="mb-0">Jumlah cluster</label>
-            <select class="form-select w-auto" name="k" id="kValue">
-              {% for i in range(2, 8) %}
-                <option value="{{ i }}" {% if i == 3 %}selected{% endif %}>{{ i }}</option>
-              {% endfor %}
-            </select>
-            <button type="submit" class="btn btn-primary" {% if current_user.role.value != 'admin' %}disabled{% endif %}>Jalankan Clustering</button>
+              <input type="hidden" name="k" value="4">
+
+              <span class="fw-semibold">Jumlah Cluster: 4</span>
+
+              <button type="submit" class="btn btn-primary"
+                  {% if current_user.role.value != 'admin' %}disabled{% endif %}>
+                  Jalankan Clustering
+              </button>
           </form>
         </div>
 
@@ -172,7 +173,7 @@
     return distribution.map(item => `
       <div class="mb-3">
         <strong>Cluster ${item.cluster} (${item.kategori})</strong>
-        <p>Jumlah data: ${item.count}. Kategori cluster diartikan berdasarkan durasi rata-rata.</p>
+        <p>Jumlah data: ${item.count}. </p>
       </div>
     `).join('');
   }

@@ -219,7 +219,7 @@ def import_csv(csv_file):
         print(f"❌ Error saat commit: {e}")
 
 if __name__ == "__main__":
-    csv_file = "data_troubleshoot_dummy.csv"
+    csv_file = sys.argv[1] if len(sys.argv) > 1 else "data_troubleshoot_500.csv"
     
     with app.app_context():
         import_csv(csv_file)

@@ -103,6 +103,12 @@ class ClusteringService:
         if df.empty or len(df) < 2:
             raise ValueError("Data terlalu sedikit untuk clustering")
 
+        if selected_k != 4:
+            raise ValueError(
+                "Kategori Ringan/Sedang/Berat/Sangat Berat hanya didukung untuk k=4. "
+                "Gunakan selected_k=4 atau sesuaikan skema label untuk k lain."
+            )
+
         features = self._prepare_features(df)
         scaler = StandardScaler()
         X = scaler.fit_transform(features)
@@ -118,24 +124,31 @@ class ClusteringService:
         pca = PCA(n_components=2)
         pca.fit(X)
 
-        cluster_info = []
+        # ------------------------------------------------------------
+        # Hitung rata-rata durasi tiap cluster
+        # ------------------------------------------------------------
+        cluster_avg = []
         for cluster_idx in range(selected_k):
-            # Calculate average duration directly from data points in this cluster
             cluster_mask = df["cluster_id"] == cluster_idx + 1
             cluster_durations = df[cluster_mask]["durasi_value"]
             avg_duration = cluster_durations.mean() if len(cluster_durations) > 0 else 0
-            
-            # Determine category based on average duration
-            if avg_duration <= 2:
-                kategori = "Ringan"
-            elif avg_duration <= 5:
-                kategori = "Sedang"
-            else:
-                kategori = "Berat"
+            cluster_avg.append({"cluster": cluster_idx + 1, "avg_duration": avg_duration})
+
+        # ------------------------------------------------------------
+        # Urutkan cluster dari durasi terendah -> tertinggi, lalu beri
+        # label RELATIF terhadap hasil clustering saat ini (bukan
+        # threshold angka mutlak yang bisa jadi tidak relevan kalau
+        # distribusi data berubah)
+        # ------------------------------------------------------------
+        cluster_avg_sorted = sorted(cluster_avg, key=lambda x: x["avg_duration"])
+        label_urutan = ["Ringan", "Sedang", "Berat", "Sangat Berat"]
+
+        cluster_info = []
+        for rank, item in enumerate(cluster_avg_sorted):
             cluster_info.append({
-                "cluster": cluster_idx + 1,
-                "avg_duration": round(avg_duration, 2),
-                "kategori": kategori,
+                "cluster": item["cluster"],
+                "avg_duration": round(item["avg_duration"], 2),
+                "kategori": label_urutan[rank],
             })
 
         distribution = []

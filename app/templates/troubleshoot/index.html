@@ -12,7 +12,6 @@
     <div class="d-flex gap-2 flex-wrap">
       {% if current_user.role.value != 'manajer' %}
       <a href="{{ url_for('troubleshoot.tambah') }}" class="btn btn-primary">Tambah Troubleshoot</a>
-      <a href="{{ url_for('troubleshoot.upload') }}" class="btn btn-outline-primary">Upload Excel</a>
       {% endif %}
       <a href="{{ url_for('troubleshoot.export') }}" class="btn btn-outline-secondary">Export Excel</a>
     </div>
@@ -29,6 +28,7 @@
           <option value="Ringan" {% if kategori_filter == 'Ringan' %}selected{% endif %}>Ringan</option>
           <option value="Sedang" {% if kategori_filter == 'Sedang' %}selected{% endif %}>Sedang</option>
           <option value="Berat" {% if kategori_filter == 'Berat' %}selected{% endif %}>Berat</option>
+          <option value="Sangat Berat" {% if kategori_filter == 'Sangat Berat' %}selected{% endif %}>Sangat Berat</option>
         </select>
       </div>
       <div class="col-md-auto">
@@ -66,8 +66,10 @@
                 <span class="badge bg-success">Ringan</span>
               {% elif item.kategori_cluster.value == 'Sedang' %}
                 <span class="badge bg-warning text-dark">Sedang</span>
-              {% else %}
+              {% elif item.kategori_cluster.value == 'Berat' %}
                 <span class="badge bg-danger">Berat</span>
+              {% else %}
+                <span class="badge bg-dark">Sangat Berat</span>
               {% endif %}
             {% else %}
               <span class="text-muted">-</span>
